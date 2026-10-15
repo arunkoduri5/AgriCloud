@@ -18,7 +18,9 @@ service cloud.firestore {
     match /bookings/{bookingId} {
       allow create: if signedIn() && request.resource.data.userId == request.auth.uid && request.resource.data.status == 'Pending';
       allow read: if signedIn() && (resource.data.userId == request.auth.uid || isAdmin());
-      allow update: if isAdmin();
+      allow update: if isAdmin() || (signedIn() && resource.data.userId == request.auth.uid
+        && resource.data.status == 'Pending' && request.resource.data.status == 'Cancelled'
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'statusReason', 'updatedAt']));
       allow delete: if isAdmin();
     }
   }

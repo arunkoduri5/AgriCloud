@@ -1,8 +1,7 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import App from './App.jsx';
-import './styles.css';
-import './premium.css';
+import './readable.css';
 
 class AppErrorBoundary extends React.Component {
   constructor(props){super(props);this.state={error:null}}

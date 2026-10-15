@@ -27,7 +27,7 @@ The app starts in demo mode when Firebase variables are empty. Data is stored in
 - Farmer: choose **Log in**, select **Farmer**, then create a farmer account. You can also browse without logging in.
 - Admin: choose **Log in**, select **Admin**, and use any email and password. The default email shown is `admin@agrirent.demo`.
 - Admin can add, edit, and remove listings, approve pending requests, or reject them.
-- The catalog has separate Vehicles (10 listings) and Equipment (9 listings) sections, using names and hourly rates from the previous farm-machinery-booking project. Booking cost is total rental hours × hourly rental rate. Only overlapping **approved** bookings block a date range.
+- The catalog has separate Vehicles (10 listings) and Equipment (9 listings) sections, using names and hourly rates from the previous farm-machinery-booking project. Booking cost is total rental hours × hourly rental rate. Overlapping **Approved** or **In use** bookings block a date range when checked by the admin.
 - Use the same browser to show the farmer and admin views. Log out to switch roles.
 - To reset demo records, clear this site's local storage in browser developer tools (Application/Storage → Local Storage → remove `agrirent-demo-v1`).
 
@@ -100,3 +100,19 @@ Demo mode includes 40 fictional booking requests distributed across Pending, App
 ## Admin navigation
 
 The admin portal has Overview, Bookings, Farmers, and Catalog tabs. Overview shows live status proportions and the six most recent requests. Use Bookings for the full history, Farmers to inspect profiles, and Catalog to manage listings. The interface uses forest green, warm ivory, editorial typography, and decorative flat tree artwork.
+
+## Readable UI and booking workflow
+
+- Uses familiar Arial / Segoe UI / system fonts with no remote font downloads.
+- Homepage has separate Browse Vehicles and Browse Equipment actions; How it works scrolls to the instructions.
+- Cards use consistent local 2D illustrations and a full-width View details action.
+- Booking flow: select dates and total hours, review the live cost estimate and delivery details, then submit and receive a request ID.
+- My bookings separates active/completed requests from rejected/cancelled requests and shows the rental timeline.
+- Admin: desktop sidebar and mobile section tabs, clickable status counts, booking search/status filters, and farmer search.
+- Open a booking to approve/reject it, start an approved rental, or mark a rental completed. These are explicit admin actions; dates do not automatically advance statuses.
+- Farmers can cancel their own Pending request with a reason. Firebase users must publish the updated firestore.rules to enable this.
+- Farmers can edit their profile and farm information. Admin can inspect farmer profiles and open any booking from their history.
+- English/Telugu interface selector and mobile bottom navigation; machinery names and farmer-entered content retain their original spelling.
+- Existing browser demo accounts, catalog edits, and bookings are retained. No additional demo records are inserted by this UI update.
+
+Run the domain and component checks with `node scripts/verify.mjs`. These are Node checks, not a browser layout test.

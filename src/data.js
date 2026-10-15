@@ -426,21 +426,30 @@ export const isCloud = cloudEnabled;
 export async function registerUser(name,email,password){
   if(cloudEnabled){const cred=await createUserWithEmailAndPassword(auth,email,password); await setDoc(doc(db,'users',cred.user.uid),{uid:cred.user.uid,name,email,role:'farmer',createdAt:new Date().toISOString()}); return {uid:cred.user.uid,name,email,role:'farmer'};}
   const x=readDemo(); if(x.users.some(u=>u.email.toLowerCase()===email.toLowerCase())) throw new Error('An account with this email already exists.');
-  const u={uid:crypto.randomUUID(),name,email,role:'farmer',password}; x.users.push(u); writeDemo(x); return u;
+  const u={uid:crypto.randomUUID(),name,email,role:'farmer',password}; x.users.push(u); writeDemo(x); const {password: secret,...profile}=u; return profile;
 }
 export async function loginUser(email,password,role){
   if(cloudEnabled){const cred=await signInWithEmailAndPassword(auth,email,password); const snap=await getDoc(doc(db,'users',cred.user.uid)); const profile=snap.exists()?snap.data():{uid:cred.user.uid,email:cred.user.email,role:'farmer'}; if(role==='admin'&&profile.role!=='admin') throw new Error('This account is not assigned the administrator role.'); return profile;}
   if(role==='admin') return {uid:'demo-admin',name:'Platform Admin',email:'admin@agrirent.demo',role:'admin'};
-  const x=readDemo(); const u=x.users.find(v=>v.email.toLowerCase()===email.toLowerCase()&&v.password===password); if(!u) throw new Error('Email or password is incorrect. Register first or use the demo admin account.'); return u;
+  const x=readDemo(); const u=x.users.find(v=>v.email.toLowerCase()===email.toLowerCase()&&v.password===password); if(!u) throw new Error('Email or password is incorrect. Register first or use the demo admin account.'); const {password: secret,...profile}=u; return profile;
 }
 export async function logoutUser(){if(cloudEnabled) await signOut(auth);}
 export async function listEquipment(){if(cloudEnabled){const s=await getDocs(collection(db,'equipment')); return s.docs.map(d=>({id:d.id,...d.data()}));} return readDemo().equipment;}
 export async function listBookings(user){if(cloudEnabled){const base=collection(db,'bookings'); const q=user.role==='admin'?base:query(base,where('userId','==',user.uid)); const s=await getDocs(q); return s.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>String(b.createdAt).localeCompare(String(a.createdAt)));} const all=readDemo().bookings; return user.role==='admin'?all:all.filter(b=>b.userId===user.uid);}
 export async function saveBooking(b){if(cloudEnabled){const ref=await addDoc(collection(db,'bookings'),{...b,createdAt:new Date().toISOString()});return {id:ref.id,...b};} const x=readDemo();const item={...b,id:crypto.randomUUID(),createdAt:new Date().toISOString()};x.bookings.unshift(item);writeDemo(x);return item;}
-export async function setBookingStatus(id,status){if(cloudEnabled){await updateDoc(doc(db,'bookings',id),{status,updatedAt:new Date().toISOString()});return;}const x=readDemo();x.bookings=x.bookings.map(b=>b.id===id?{...b,status}:b);writeDemo(x);}
+export async function setBookingStatus(id,status,reason=''){if(cloudEnabled){await updateDoc(doc(db,'bookings',id),{status,statusReason:reason,updatedAt:new Date().toISOString()});return;}const x=readDemo();x.bookings=x.bookings.map(b=>b.id===id?{...b,status,statusReason:reason,updatedAt:new Date().toISOString()}:b);writeDemo(x);}
 export async function saveEquipment(item){if(cloudEnabled){if(item.id) await setDoc(doc(db,'equipment',item.id),item); else await addDoc(collection(db,'equipment'),{...item,active:true});return;}const x=readDemo(); if(item.id)x.equipment=x.equipment.map(e=>e.id===item.id?item:e);else x.equipment.unshift({...item,id:crypto.randomUUID(),active:true});writeDemo(x);}
 export async function deleteEquipment(id){if(cloudEnabled){await deleteDoc(doc(db,'equipment',id));return;}const x=readDemo();x.equipment=x.equipment.filter(e=>e.id!==id);writeDemo(x);}
-export function subscribeDemoRefresh(cb){if(!cloudEnabled){window.addEventListener('agrirent-change',cb);return()=>window.removeEventListener('agrirent-change',cb);}return()=>{};}
+export function subscribeDemoRefresh(cb){if(!cloudEnabled){const onStorage=e=>{if(e.key===STORAGE_KEY)cb()};window.addEventListener('agrirent-change',cb);window.addEventListener('storage',onStorage);return()=>{window.removeEventListener('agrirent-change',cb);window.removeEventListener('storage',onStorage);};}return()=>{};}
 export function getSeedEquipment(){return seedEquipment;}
 
 export async function listFarmers(user){if(user?.role!=='admin')return [];if(cloudEnabled){const snap=await getDocs(query(collection(db,'users'),where('role','==','farmer')));return snap.docs.map(d=>{const {password,...profile}=d.data();return profile;});}return readDemo().users.filter(u=>u.role==='farmer').map(({password,...profile})=>profile);}
+
+export async function saveFarmerProfile(user, details) {
+  const allowed = ['name','phone','location','farmName','farmSizeAcres','primaryCrop','secondaryCrop','irrigation','address','preferredService'];
+  const clean = Object.fromEntries(allowed.filter(key=>key in details).map(key=>[key,details[key]]));
+  if(cloudEnabled) await updateDoc(doc(db,'users',user.uid),clean);
+  else {const x=readDemo();x.users=x.users.map(u=>u.uid===user.uid?{...u,...clean}:u);writeDemo(x);}
+  const {password,...safeUser} = user;
+  return {...safeUser,...clean};
+}
