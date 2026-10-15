@@ -396,12 +396,30 @@ const seedFarmers = [
     "demo": true
   }
 ];
+function profileDetails(farmer,index){
+  return {...farmer,phone:`+91 9XX XXX ${String(index+1).padStart(4,'0')} (demo)`,farmName:`${farmer.name.split(' ')[0]} Family Farm`,farmSizeAcres:[3.5,5,2.75,8,4.25,6,9.5,3,7,4.5][index%10],primaryCrop:['Paddy','Cotton','Maize','Chilli','Sugarcane'][index%5],secondaryCrop:['Pulses','Groundnut','Vegetables','Sesame'][index%4],irrigation:['Canal irrigation','Borewell','Drip irrigation','Rain-fed'][index%4],address:`Demo Farm ${String(index+1).padStart(2,'0')}, ${farmer.location}`,joinedAt:`2026-${String(1+index%8).padStart(2,'0')}-${String(3+index).padStart(2,'0')}`,preferredService:['Tractor tillage','Crop harvesting','Crop spraying','Soil preparation'][index%4],demo:true};
+}
+function demoBookingData(users,equipment,existing){
+  const statuses=['Pending','Approved','Approved','Rejected','Cancelled','Pending','Approved','Rejected','Cancelled','Pending'];
+  const dateAt=offset=>{const d=new Date();d.setUTCDate(d.getUTCDate()+offset);return d.toISOString().slice(0,10)};
+  const rows=[];
+  for(let i=0;i<40;i++){
+    const farmer=users.find(u=>u.uid===`demo-farmer-${String(i%20+1).padStart(2,'0')}`);const machine=equipment[i%equipment.length];if(!farmer||!machine)continue;
+    const status=statuses[i%statuses.length];let offset=status==='Pending'?i+2:i-18;let startDate=dateAt(offset);
+    while(status==='Approved'&&[...existing,...rows].some(b=>b.equipmentId===machine.id&&b.status==='Approved'&&startDate<=b.endDate&&startDate>=b.startDate))startDate=dateAt(++offset);
+    const hours=[4,6,5,3,8,7,4,5][i%8];
+    rows.push({id:`demo-booking-${String(i+1).padStart(3,'0')}`,userId:farmer.uid,userName:farmer.name,userEmail:farmer.email,equipmentId:machine.id,equipmentName:machine.name,startDate,endDate:startDate,days:1,hours,pricePerHour:machine.pricePerHour,totalPrice:hours*machine.pricePerHour,status,createdAt:dateAt(Math.min(offset-4,-1))+'T08:30:00.000Z',farmLocation:farmer.location,farmSizeAcres:farmer.farmSizeAcres,crop:farmer.primaryCrop,deliveryMode:i%2?'Farm delivery':'Pickup from provider',operatorRequired:machine.group==='Vehicles',notes:status==='Rejected'?'Provider unavailable for the requested date.':status==='Cancelled'?'Farmer rescheduled the field work.':status==='Approved'?'Schedule confirmed with the farmer.':'Awaiting availability review by the administrator.',demo:true});
+  }
+  return rows;
+}
 function readDemo(){
-  try {
-    const x=JSON.parse(localStorage.getItem(STORAGE_KEY));
-    if(x&&Array.isArray(x.equipment)&&Array.isArray(x.bookings)&&Array.isArray(x.users)){ if(x.catalogVersion!==2){x.equipment=seedEquipment;x.catalogVersion=2;localStorage.setItem(STORAGE_KEY,JSON.stringify(x));} if(x.farmersVersion!==1){for(const farmer of seedFarmers){if(!x.users.some(u=>u.email.toLowerCase()===farmer.email))x.users.push(farmer);}x.farmersVersion=1;localStorage.setItem(STORAGE_KEY,JSON.stringify(x));} return x; }
-  } catch {}
-  const x={catalogVersion:2,farmersVersion:1,equipment:seedEquipment,bookings:[],users:seedFarmers}; localStorage.setItem(STORAGE_KEY,JSON.stringify(x)); return x;
+  let x;try{x=JSON.parse(localStorage.getItem(STORAGE_KEY));}catch{}
+  if(!x||!Array.isArray(x.equipment)||!Array.isArray(x.bookings)||!Array.isArray(x.users))x={equipment:seedEquipment,bookings:[],users:[]};
+  if(x.catalogVersion!==2){x.equipment=seedEquipment;x.catalogVersion=2;}
+  if(x.farmersVersion!==1){for(const farmer of seedFarmers){if(!x.users.some(u=>u.email?.toLowerCase()===farmer.email))x.users.push(farmer);}x.farmersVersion=1;}
+  if(x.profileVersion!==1){x.users=x.users.map(u=>{const i=seedFarmers.findIndex(f=>f.uid===u.uid);return i>=0?{...profileDetails(u,i),...u}:u});x.profileVersion=1;}
+  if(x.bookingDemoVersion!==1){const ids=new Set(x.bookings.map(b=>b.id));x.bookings.push(...demoBookingData(x.users,x.equipment,x.bookings).filter(b=>!ids.has(b.id)));x.bookingDemoVersion=1;}
+  localStorage.setItem(STORAGE_KEY,JSON.stringify(x));return x;
 }
 function writeDemo(x){localStorage.setItem(STORAGE_KEY,JSON.stringify(x)); window.dispatchEvent(new Event('agrirent-change'));}
 export const isCloud = cloudEnabled;
