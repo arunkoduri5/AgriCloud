@@ -88,3 +88,7 @@ src/
 firestore.rules
 .env.example
 ```
+
+## Demo farmers
+
+20 fictional farmer accounts are included in browser demo mode: `farmer01@agrirent.demo` through `farmer20@agrirent.demo`. All use the demo password `demo1234`. The admin dashboard lists farmer profiles. These test accounts are not created in Firebase Authentication; cloud mode lists actual registered farmers. Existing browser accounts and bookings are preserved when these demo profiles are added.

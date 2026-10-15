@@ -214,13 +214,194 @@ const seedEquipment = [
     "active": true
   }
 ];
-const seedBookings = [];
+const seedFarmers = [
+  {
+    "uid": "demo-farmer-01",
+    "name": "Ramesh Kumar",
+    "email": "farmer01@agrirent.demo",
+    "password": "demo1234",
+    "role": "farmer",
+    "location": "Khammam, Telangana",
+    "demo": true
+  },
+  {
+    "uid": "demo-farmer-02",
+    "name": "Lakshmi Devi",
+    "email": "farmer02@agrirent.demo",
+    "password": "demo1234",
+    "role": "farmer",
+    "location": "Kusumanchi, Telangana",
+    "demo": true
+  },
+  {
+    "uid": "demo-farmer-03",
+    "name": "Suresh Reddy",
+    "email": "farmer03@agrirent.demo",
+    "password": "demo1234",
+    "role": "farmer",
+    "location": "Wyra, Telangana",
+    "demo": true
+  },
+  {
+    "uid": "demo-farmer-04",
+    "name": "Anitha Rao",
+    "email": "farmer04@agrirent.demo",
+    "password": "demo1234",
+    "role": "farmer",
+    "location": "Madhira, Telangana",
+    "demo": true
+  },
+  {
+    "uid": "demo-farmer-05",
+    "name": "Venkatesh Naik",
+    "email": "farmer05@agrirent.demo",
+    "password": "demo1234",
+    "role": "farmer",
+    "location": "Bonakal, Telangana",
+    "demo": true
+  },
+  {
+    "uid": "demo-farmer-06",
+    "name": "Padma Rani",
+    "email": "farmer06@agrirent.demo",
+    "password": "demo1234",
+    "role": "farmer",
+    "location": "Nelakondapally, Telangana",
+    "demo": true
+  },
+  {
+    "uid": "demo-farmer-07",
+    "name": "Narasimha Rao",
+    "email": "farmer07@agrirent.demo",
+    "password": "demo1234",
+    "role": "farmer",
+    "location": "Kallur, Telangana",
+    "demo": true
+  },
+  {
+    "uid": "demo-farmer-08",
+    "name": "Kavitha Devi",
+    "email": "farmer08@agrirent.demo",
+    "password": "demo1234",
+    "role": "farmer",
+    "location": "Thallada, Telangana",
+    "demo": true
+  },
+  {
+    "uid": "demo-farmer-09",
+    "name": "Ravi Teja",
+    "email": "farmer09@agrirent.demo",
+    "password": "demo1234",
+    "role": "farmer",
+    "location": "Enkoor, Telangana",
+    "demo": true
+  },
+  {
+    "uid": "demo-farmer-10",
+    "name": "Sunitha Reddy",
+    "email": "farmer10@agrirent.demo",
+    "password": "demo1234",
+    "role": "farmer",
+    "location": "Konijerla, Telangana",
+    "demo": true
+  },
+  {
+    "uid": "demo-farmer-11",
+    "name": "Mahesh Kumar",
+    "email": "farmer11@agrirent.demo",
+    "password": "demo1234",
+    "role": "farmer",
+    "location": "Sathupally, Telangana",
+    "demo": true
+  },
+  {
+    "uid": "demo-farmer-12",
+    "name": "Saraswathi Rao",
+    "email": "farmer12@agrirent.demo",
+    "password": "demo1234",
+    "role": "farmer",
+    "location": "Penuballi, Telangana",
+    "demo": true
+  },
+  {
+    "uid": "demo-farmer-13",
+    "name": "Srinivas Goud",
+    "email": "farmer13@agrirent.demo",
+    "password": "demo1234",
+    "role": "farmer",
+    "location": "Tirumalayapalem, Telangana",
+    "demo": true
+  },
+  {
+    "uid": "demo-farmer-14",
+    "name": "Jyothi Rani",
+    "email": "farmer14@agrirent.demo",
+    "password": "demo1234",
+    "role": "farmer",
+    "location": "Mudigonda, Telangana",
+    "demo": true
+  },
+  {
+    "uid": "demo-farmer-15",
+    "name": "Rajesh Naik",
+    "email": "farmer15@agrirent.demo",
+    "password": "demo1234",
+    "role": "farmer",
+    "location": "Chintakani, Telangana",
+    "demo": true
+  },
+  {
+    "uid": "demo-farmer-16",
+    "name": "Lalitha Devi",
+    "email": "farmer16@agrirent.demo",
+    "password": "demo1234",
+    "role": "farmer",
+    "location": "Raghunadhapalem, Telangana",
+    "demo": true
+  },
+  {
+    "uid": "demo-farmer-17",
+    "name": "Krishna Reddy",
+    "email": "farmer17@agrirent.demo",
+    "password": "demo1234",
+    "role": "farmer",
+    "location": "Kamepally, Telangana",
+    "demo": true
+  },
+  {
+    "uid": "demo-farmer-18",
+    "name": "Vijaya Lakshmi",
+    "email": "farmer18@agrirent.demo",
+    "password": "demo1234",
+    "role": "farmer",
+    "location": "Vemsoor, Telangana",
+    "demo": true
+  },
+  {
+    "uid": "demo-farmer-19",
+    "name": "Prasad Rao",
+    "email": "farmer19@agrirent.demo",
+    "password": "demo1234",
+    "role": "farmer",
+    "location": "Yerrupalem, Telangana",
+    "demo": true
+  },
+  {
+    "uid": "demo-farmer-20",
+    "name": "Bhavani Devi",
+    "email": "farmer20@agrirent.demo",
+    "password": "demo1234",
+    "role": "farmer",
+    "location": "Singareni, Telangana",
+    "demo": true
+  }
+];
 function readDemo(){
   try {
     const x=JSON.parse(localStorage.getItem(STORAGE_KEY));
-    if(x&&Array.isArray(x.equipment)&&Array.isArray(x.bookings)&&Array.isArray(x.users)){ if(x.catalogVersion!==2){x.equipment=seedEquipment;x.catalogVersion=2;localStorage.setItem(STORAGE_KEY,JSON.stringify(x));} return x; }
+    if(x&&Array.isArray(x.equipment)&&Array.isArray(x.bookings)&&Array.isArray(x.users)){ if(x.catalogVersion!==2){x.equipment=seedEquipment;x.catalogVersion=2;localStorage.setItem(STORAGE_KEY,JSON.stringify(x));} if(x.farmersVersion!==1){for(const farmer of seedFarmers){if(!x.users.some(u=>u.email.toLowerCase()===farmer.email))x.users.push(farmer);}x.farmersVersion=1;localStorage.setItem(STORAGE_KEY,JSON.stringify(x));} return x; }
   } catch {}
-  const x={catalogVersion:2,equipment:seedEquipment,bookings:[],users:[]}; localStorage.setItem(STORAGE_KEY,JSON.stringify(x)); return x;
+  const x={catalogVersion:2,farmersVersion:1,equipment:seedEquipment,bookings:[],users:seedFarmers}; localStorage.setItem(STORAGE_KEY,JSON.stringify(x)); return x;
 }
 function writeDemo(x){localStorage.setItem(STORAGE_KEY,JSON.stringify(x)); window.dispatchEvent(new Event('agrirent-change'));}
 export const isCloud = cloudEnabled;
@@ -243,3 +424,5 @@ export async function saveEquipment(item){if(cloudEnabled){if(item.id) await set
 export async function deleteEquipment(id){if(cloudEnabled){await deleteDoc(doc(db,'equipment',id));return;}const x=readDemo();x.equipment=x.equipment.filter(e=>e.id!==id);writeDemo(x);}
 export function subscribeDemoRefresh(cb){if(!cloudEnabled){window.addEventListener('agrirent-change',cb);return()=>window.removeEventListener('agrirent-change',cb);}return()=>{};}
 export function getSeedEquipment(){return seedEquipment;}
+
+export async function listFarmers(user){if(user?.role!=='admin')return [];if(cloudEnabled){const snap=await getDocs(query(collection(db,'users'),where('role','==','farmer')));return snap.docs.map(d=>{const {password,...profile}=d.data();return profile;});}return readDemo().users.filter(u=>u.role==='farmer').map(({password,...profile})=>profile);}
