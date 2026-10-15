@@ -96,3 +96,7 @@ firestore.rules
 ## Full demo dataset and farmer inspection
 
 Demo mode includes 40 fictional booking requests distributed across Pending, Approved, Rejected, and Cancelled, with rental hours, matching hourly prices, dates, crop, field location, delivery preference, and status notes. The initial mix is 12 Pending, 12 Approved, 8 Rejected, and 8 Cancelled. Counts always use actual stored records and change when requests are reviewed. Click a farmer card or a farmer name on an admin booking to inspect the profile, farm details, per-status counts, and booking history. Phone numbers are masked fictional placeholders. Existing bookings, accounts, and admin decisions are retained; sample records are inserted only once. No demo records are uploaded to Firebase.
+
+## Admin navigation
+
+The admin portal has Overview, Bookings, Farmers, and Catalog tabs. Overview shows live status proportions and the six most recent requests. Use Bookings for the full history, Farmers to inspect profiles, and Catalog to manage listings. The interface uses forest green, warm ivory, editorial typography, and decorative flat tree artwork.
