@@ -4,20 +4,223 @@ import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, query, setDoc, upd
 
 const STORAGE_KEY = 'agrirent-demo-v1';
 const seedEquipment = [
-  { id:'tractor-1', name:'Mahindra 575 DI XP Plus', category:'Tractors', pricePerDay:1500, location:'Khammam, Telangana', description:'A dependable 47 HP tractor for ploughing, hauling, and everyday farm work.', image:'https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=900&q=85', active:true, badge:'Popular' },
-  { id:'harvester-1', name:'Kubota DC-68G Harvester', category:'Harvesters', pricePerDay:4200, location:'Warangal, Telangana', description:'Efficient paddy harvesting with a clean finish and reduced crop loss.', image:'https://images.unsplash.com/photo-1530267981375-f0de937f5f13?auto=format&fit=crop&w=900&q=85', active:true, badge:'High demand' },
-  { id:'rotavator-1', name:'Shaktiman Regular Smart', category:'Land preparation', pricePerDay:950, location:'Suryapet, Telangana', description:'Strong rotary tiller for preparing seedbeds and breaking up compact soil.', image:'https://images.unsplash.com/photo-1592982537447-6f2a6a0f4e6a?auto=format&fit=crop&w=900&q=85', active:true },
-  { id:'sprayer-1', name:'Battery Power Sprayer 20L', category:'Sprayers', pricePerDay:450, location:'Khammam, Telangana', description:'Lightweight sprayer for applying crop protection and nutrition products.', image:'https://images.unsplash.com/photo-1499529112087-3cb3b73cec95?auto=format&fit=crop&w=900&q=85', active:true },
-  { id:'cultivator-1', name:'Fieldking Tractor Cultivator', category:'Land preparation', pricePerDay:700, location:'Nalgonda, Telangana', description:'Prepares soil quickly between rows and helps manage weeds.', image:'https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=900&q=85', active:true },
-  { id:'thresher-1', name:'AgroPower Multi-Crop Thresher', category:'Harvesters', pricePerDay:1800, location:'Mahabubabad, Telangana', description:'Separates grain from stalks for several common crops.', image:'https://images.unsplash.com/photo-1472396961693-142e6e269027?auto=format&fit=crop&w=900&q=85', active:true },
+  {
+    "id": "vehicle-1",
+    "name": "Mahindra Tractor",
+    "group": "Vehicles",
+    "category": "Tractors",
+    "pricePerHour": 800,
+    "location": "Village A",
+    "description": "Farm tractor for ploughing, tilling, and planting.",
+    "image": "",
+    "active": true
+  },
+  {
+    "id": "vehicle-2",
+    "name": "Sonalika Tractor",
+    "group": "Vehicles",
+    "category": "Tractors",
+    "pricePerHour": 750,
+    "location": "Village B",
+    "description": "Farm tractor for ploughing, tilling, and planting.",
+    "image": "",
+    "active": true
+  },
+  {
+    "id": "vehicle-3",
+    "name": "Wheat Harvester",
+    "group": "Vehicles",
+    "category": "Harvesters",
+    "pricePerHour": 1500,
+    "location": "Village C",
+    "description": "Harvesting machinery for field crops.",
+    "image": "",
+    "active": true
+  },
+  {
+    "id": "vehicle-4",
+    "name": "Rice Harvester",
+    "group": "Vehicles",
+    "category": "Harvesters",
+    "pricePerHour": 1400,
+    "location": "Village D",
+    "description": "Harvesting machinery for field crops.",
+    "image": "",
+    "active": true
+  },
+  {
+    "id": "vehicle-5",
+    "name": "Sugarcane Cutter 1",
+    "group": "Vehicles",
+    "category": "Harvesters",
+    "pricePerHour": 2000,
+    "location": "Village E",
+    "description": "Harvesting machinery for field crops.",
+    "image": "",
+    "active": true
+  },
+  {
+    "id": "vehicle-6",
+    "name": "Sugarcane Cutter 2",
+    "group": "Vehicles",
+    "category": "Harvesters",
+    "pricePerHour": 2100,
+    "location": "Village F",
+    "description": "Harvesting machinery for field crops.",
+    "image": "",
+    "active": true
+  },
+  {
+    "id": "vehicle-7",
+    "name": "JCB Loader",
+    "group": "Vehicles",
+    "category": "JCB",
+    "pricePerHour": 1800,
+    "location": "Village G",
+    "description": "Heavy machinery for digging, clearing, and earthwork.",
+    "image": "",
+    "active": true
+  },
+  {
+    "id": "vehicle-8",
+    "name": "JCB Excavator",
+    "group": "Vehicles",
+    "category": "JCB",
+    "pricePerHour": 1700,
+    "location": "Village H",
+    "description": "Heavy machinery for digging, clearing, and earthwork.",
+    "image": "",
+    "active": true
+  },
+  {
+    "id": "vehicle-9",
+    "name": "Agricopter AG 365",
+    "group": "Vehicles",
+    "category": "Spraying",
+    "pricePerHour": 2500,
+    "location": "Nearby Village",
+    "description": "Crop spraying machinery for agricultural applications.",
+    "image": "",
+    "active": true
+  },
+  {
+    "id": "vehicle-10",
+    "name": "STIHL SR430",
+    "group": "Vehicles",
+    "category": "Spraying",
+    "pricePerHour": 500,
+    "location": "Village Equipment Center",
+    "description": "Crop spraying machinery for agricultural applications.",
+    "image": "",
+    "active": true
+  },
+  {
+    "id": "equipment-1",
+    "name": "Power Tiller",
+    "group": "Equipment",
+    "category": "Farm implements",
+    "pricePerHour": 700,
+    "location": "Location to be confirmed",
+    "description": "Power Tiller for farm operations. Contact the administrator to confirm the pickup location.",
+    "image": "",
+    "active": true
+  },
+  {
+    "id": "equipment-2",
+    "name": "Seed Drill",
+    "group": "Equipment",
+    "category": "Farm implements",
+    "pricePerHour": 400,
+    "location": "Location to be confirmed",
+    "description": "Seed Drill for farm operations. Contact the administrator to confirm the pickup location.",
+    "image": "",
+    "active": true
+  },
+  {
+    "id": "equipment-3",
+    "name": "Rotavator",
+    "group": "Equipment",
+    "category": "Farm implements",
+    "pricePerHour": 900,
+    "location": "Location to be confirmed",
+    "description": "Rotavator for farm operations. Contact the administrator to confirm the pickup location.",
+    "image": "",
+    "active": true
+  },
+  {
+    "id": "equipment-4",
+    "name": "Cultivator",
+    "group": "Equipment",
+    "category": "Farm implements",
+    "pricePerHour": 500,
+    "location": "Location to be confirmed",
+    "description": "Cultivator for farm operations. Contact the administrator to confirm the pickup location.",
+    "image": "",
+    "active": true
+  },
+  {
+    "id": "equipment-5",
+    "name": "Disc Harrow",
+    "group": "Equipment",
+    "category": "Farm implements",
+    "pricePerHour": 600,
+    "location": "Location to be confirmed",
+    "description": "Disc Harrow for farm operations. Contact the administrator to confirm the pickup location.",
+    "image": "",
+    "active": true
+  },
+  {
+    "id": "equipment-6",
+    "name": "Plough",
+    "group": "Equipment",
+    "category": "Farm implements",
+    "pricePerHour": 450,
+    "location": "Location to be confirmed",
+    "description": "Plough for farm operations. Contact the administrator to confirm the pickup location.",
+    "image": "",
+    "active": true
+  },
+  {
+    "id": "equipment-7",
+    "name": "Paddy Transplanter",
+    "group": "Equipment",
+    "category": "Farm implements",
+    "pricePerHour": 1200,
+    "location": "Location to be confirmed",
+    "description": "Paddy Transplanter for farm operations. Contact the administrator to confirm the pickup location.",
+    "image": "",
+    "active": true
+  },
+  {
+    "id": "equipment-8",
+    "name": "Reaper",
+    "group": "Equipment",
+    "category": "Farm implements",
+    "pricePerHour": 800,
+    "location": "Location to be confirmed",
+    "description": "Reaper for farm operations. Contact the administrator to confirm the pickup location.",
+    "image": "",
+    "active": true
+  },
+  {
+    "id": "equipment-9",
+    "name": "Threshing Machine",
+    "group": "Equipment",
+    "category": "Farm implements",
+    "pricePerHour": 1000,
+    "location": "Location to be confirmed",
+    "description": "Threshing Machine for farm operations. Contact the administrator to confirm the pickup location.",
+    "image": "",
+    "active": true
+  }
 ];
 const seedBookings = [];
 function readDemo(){
   try {
     const x=JSON.parse(localStorage.getItem(STORAGE_KEY));
-    if(x&&Array.isArray(x.equipment)&&Array.isArray(x.bookings)&&Array.isArray(x.users)) return x;
+    if(x&&Array.isArray(x.equipment)&&Array.isArray(x.bookings)&&Array.isArray(x.users)){ if(x.catalogVersion!==2){x.equipment=seedEquipment;x.catalogVersion=2;localStorage.setItem(STORAGE_KEY,JSON.stringify(x));} return x; }
   } catch {}
-  const x={equipment:seedEquipment,bookings:[],users:[]}; localStorage.setItem(STORAGE_KEY,JSON.stringify(x)); return x;
+  const x={catalogVersion:2,equipment:seedEquipment,bookings:[],users:[]}; localStorage.setItem(STORAGE_KEY,JSON.stringify(x)); return x;
 }
 function writeDemo(x){localStorage.setItem(STORAGE_KEY,JSON.stringify(x)); window.dispatchEvent(new Event('agrirent-change'));}
 export const isCloud = cloudEnabled;

@@ -27,7 +27,7 @@ The app starts in demo mode when Firebase variables are empty. Data is stored in
 - Farmer: choose **Log in**, select **Farmer**, then create a farmer account. You can also browse without logging in.
 - Admin: choose **Log in**, select **Admin**, and use any email and password. The default email shown is `admin@agrirent.demo`.
 - Admin can add, edit, and remove listings, approve pending requests, or reject them.
-- Booking cost is calculated as inclusive calendar days × daily rental rate. Only overlapping **approved** bookings block a date range.
+- The catalog has separate Vehicles (10 listings) and Equipment (9 listings) sections, using names and hourly rates from the previous farm-machinery-booking project. Booking cost is total rental hours × hourly rental rate. Only overlapping **approved** bookings block a date range.
 - Use the same browser to show the farmer and admin views. Log out to switch roles.
 - To reset demo records, clear this site's local storage in browser developer tools (Application/Storage → Local Storage → remove `agrirent-demo-v1`).
 
@@ -50,7 +50,7 @@ VITE_FIREBASE_APP_ID=...
 ```
 
 5. In Firestore Rules, publish the contents of `firestore.rules`.
-6. Add the sample equipment from the app's demo catalog as documents in the `equipment` collection. Each document uses `name`, `category`, `pricePerDay` (number), `location`, `description`, `image`, `active` (boolean), and optional `badge` fields. Firestore does not automatically receive demo-mode local data.
+6. Add the sample equipment from the app's demo catalog as documents in the `equipment` collection. Each document uses `name`, `category`, `pricePerHour` (number), `group` (Vehicles or Equipment), `location`, `description`, `image`, `active` (boolean), and optional `badge` fields. Firestore does not automatically receive demo-mode local data.
 7. Register your farmer account through the app. To grant an administrator role, change that user's document in `users/{uid}` to `{ role: "admin" }` in the Firebase console. Only a trusted project owner should do this. New users can create only farmer profiles.
 8. Restart the dev server after changing `.env`:
 
